@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;SPARQL-JAVA-master&apos;" deleteContents="false" description="Delete resource &apos;SPARQL-JAVA-master&apos;" element1="/SPARQL-JAVA-master" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1517008413580"/>
+</session>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete element from project &apos;SPARQL-JAVA-master&apos;&#x0D;&#x0A;- Original project: &apos;SPARQL-JAVA-master&apos;&#x0D;&#x0A;- Original element: &apos;topCandidatos.csv&apos;" description="Delete element" element1="src/com/bordercloud/sparql/topCandidatos.csv" elements="0" flags="589830" id="org.eclipse.jdt.ui.delete" resources="1" stamp="1515887035039" subPackages="false" version="1.0"/>
+</session>

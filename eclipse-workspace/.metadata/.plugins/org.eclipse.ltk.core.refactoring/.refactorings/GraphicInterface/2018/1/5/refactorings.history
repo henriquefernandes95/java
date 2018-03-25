@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;Gui.java&apos; to &apos;SPARQL-JAVA-master/SPARQL-JAVA-master/src/com.bordercloud.sparql&apos;&#x0D;&#x0A;- Original project: &apos;GraphicInterface&apos;&#x0D;&#x0A;- Destination element: &apos;SPARQL-JAVA-master/SPARQL-JAVA-master/src/com.bordercloud.sparql&apos;&#x0D;&#x0A;- Original element: &apos;Gui.java&apos;" description="Copy compilation unit" destination="=SPARQL-JAVA-master/SPARQL-JAVA-master\/src&lt;com.bordercloud.sparql" element1="/src&lt;{Gui.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1517401293100" units="1" version="1.0"/>
+</session>

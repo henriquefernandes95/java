@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;WIKIDATA_POL_RET&apos;" deleteContents="false" description="Delete resource &apos;WIKIDATA_POL_RET&apos;" element1="/WIKIDATA_POL_RET" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1514980484458"/>
+</session>

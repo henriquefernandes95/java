@@ -1,0 +1,144 @@
+package com.bordercloud.sparql;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.StringTokenizer;
+
+public class Proc extends Thread{
+	String file = "C:\\Users\\00\\Desktop\\arquivo.csv";
+	
+	String line = "";
+	String split = ",";
+    //File table = new File("C:\\Users\\00\\Desktop\\test.csv");
+    //static PrintWriter pw;
+    String querySelect;
+    int x=0;
+    StringBuilder sb;
+    BufferedReader br;
+    static int num;
+	public Proc(StringBuilder sb,BufferedReader br,int num) {
+		this.sb=sb;
+		this.br=br;
+		this.num=num;
+	}
+	public void run() {
+		try {
+        	
+        	line = br.readLine(); // próxima linha
+			while((line = br.readLine())!= null){ //mantém no loop até a última linha do csv
+				String[] person = line.split(split);
+				String name = person[1];
+				String fname;
+				String sname;
+				String cap;
+				String low;
+				
+				
+				
+				StringTokenizer toke = new StringTokenizer(name);
+				fname = toke.nextToken(); //primeiro nome
+				sname = toke.nextToken(); //segundo nome
+				
+				//Último nome
+				while(toke.hasMoreTokens()) {
+					sname = toke.nextToken();
+				}
+				sname=sname.substring(0, sname.length()-2);
+				
+				cap=fname.substring(0,2);
+				cap=cap.toUpperCase();
+				low=fname.substring(2).toLowerCase();
+				fname=cap+low;
+			
+				cap = sname.substring(0, 1);
+				low = sname.substring(1).toLowerCase();
+				cap=cap.toUpperCase();
+				sname=cap+low;
+				
+				name = fname+" "+sname+"\"";	//Adiciona o espaço no nome
+				
+				
+				System.out.println(sname);
+				querySelect = "SELECT ?name ?label "
+	                    + //"FROM <http://linkedgadget.com/wiki/Data:Jarvis_2016#personal>"+
+	                    "where {"
+	                    + "  ?name wdt:P106 wd:Q82955. "
+	                    + "  ?name wdt:P27 wd:Q155.    "
+	                    + "  ?name wdt:P937 wd:Q2844.  "
+	                    + "  ?name rdfs:label ?nameLabel. "
+	                    + "  optional {?name wdt:P570 ?death}."
+	                    + "  filter (!bound(?death))."
+	                    + "  FILTER langMatches( lang(?nameLabel), \"pt\" )."
+	                    + "  FILTER strafter(?nameLabel,"+name+")."
+	                    + "  BIND (STR(?nameLabel)  AS ?label) "
+	                    + "} ";
+	            
+	            
+
+	            System.out.println("Query : ");
+	            System.out.println(querySelect);
+
+	            String endpoint2 = "https://query.wikidata.org/sparql";
+	            System.out.println("");
+	            System.out.println("Endpoint : " + endpoint2);
+	            System.out.println("");
+	            System.out.println("Result : ");
+	            Endpoint sp2 = new Endpoint(endpoint2, false);
+	            HashMap<String, HashMap> rs2 = sp2.query(querySelect);
+	            //printResult(rs2, 40);
+	            if(rs2.get("variables") == null) {
+	            	System.out.println("ESTÁ VAZIO");
+	            }
+	            saveResult(rs2, 40,sb);
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error");
+			e.printStackTrace();
+		} catch (EndpointException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+	}
+	 public static void saveResult(HashMap<String, HashMap> rs, int size, StringBuilder sb) throws FileNotFoundException {
+	    	
+	    	
+	        for (String variable : (ArrayList<String>) rs.get("result").get("variables")) {
+	            System.out.print(String.format("%-" + size + "." + size + "s", variable) + " | ");
+	            //sb.append(String.format("%-" + size + "." + size + "s", variable)+",");
+	            //pw.write(sb.toString());
+	        }
+	        System.out.print("\n");
+	        //sb.append("\n");
+	        for (HashMap<String, Object> value : (ArrayList<HashMap<String, Object>>) rs.get("result").get("rows")) {
+	            int x=1;
+	            for (String variable : (ArrayList<String>) rs.get("result").get("variables")) {
+	                //System.out.println(value.get(variable));
+	                System.out.print(String.format("%-" + size + "." + size + "s", value.get(variable)) + " | ");
+	                
+	                sb.append(String.format("%-" + size + "." + size + "s", value.get(variable)+""));
+	               
+	                if(x<2) {
+	                	sb.append(",");
+	                }
+	                x++;
+	            }
+	            System.out.print("\n");
+	            sb.append("\n");
+	            System.out.println(num);
+	        }
+	        
+	    }
+}
+

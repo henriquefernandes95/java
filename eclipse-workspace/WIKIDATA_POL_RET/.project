@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>WIKIDATA_POL_RET</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>src/Endpoint.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/SPARQL-JAVA-master/SPARQL-JAVA-master/src/com/bordercloud/sparql/Endpoint.java</locationURI>
+		</link>
+		<link>
+			<name>src/EndpointException.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/SPARQL-JAVA-master/SPARQL-JAVA-master/src/com/bordercloud/sparql/EndpointException.java</locationURI>
+		</link>
+		<link>
+			<name>src/ParserSPARQLResultHandler.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Desktop/SPARQL-JAVA-master/SPARQL-JAVA-master/src/com/bordercloud/sparql/ParserSPARQLResultHandler.java</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

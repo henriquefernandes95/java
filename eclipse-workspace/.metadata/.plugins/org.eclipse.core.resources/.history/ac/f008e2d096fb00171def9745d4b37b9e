@@ -1,0 +1,195 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2016 Karima Rafes.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+//Download :  https://github.com/BorderCloud/SPARQL-JAVA/dist
+package com.bordercloud.sparql;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import java.nio.file.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+
+/**
+ *
+ * @author Karima Rafes
+ */
+public class Main {
+
+    /**
+     * @param args the command line arguments
+     * @throws IOException 
+     * @throws EndpointException 
+     */
+    public static void main(String[] args) throws IOException, EndpointException {
+        //exampleWikidata();
+        //variaveis
+    	String file = "C:\\Users\\Henrique\\Desktop\\topCandidatos.csv";
+    	BufferedReader br = null;
+    	String line = "";
+    	String split = ",";
+        File table = new File("C:\\Users\\Henrique\\Desktop\\test.csv");
+        String querySelect;
+        int x=0;
+        
+        //System.out.println(table.);
+        //Lendo o CSV
+        try {
+        	br = new BufferedReader(new FileReader(file));
+        	line = br.readLine(); // próxima linha
+			while((line = br.readLine())!= null){ //mantém no loop até a última linha do csv
+				String[] person = line.split(split);
+				String name = person[1];
+				String fname;
+				String sname;
+				String cap;
+				String low;
+				
+				StringTokenizer toke = new StringTokenizer(name);
+				fname = toke.nextToken(); //primeiro nome
+				sname = toke.nextToken(); //segundo nome
+				cap=fname.substring(0,2);
+				cap=cap.toUpperCase();
+				low=fname.substring(2).toLowerCase();
+				fname=cap+low;
+			
+				cap = sname.substring(0, 1);
+				low = sname.substring(1).toLowerCase();
+				cap=cap.toUpperCase();
+				sname=cap+low;
+				System.out.println(sname);
+				
+				name = fname+" "+sname;	//Adicionar as aspas para a query
+				if(toke.hasMoreElements()) {
+					name+="\"";
+				}
+				
+				System.out.println(sname);
+				querySelect = "SELECT ?name ?label "
+	                    + //"FROM <http://linkedgadget.com/wiki/Data:Jarvis_2016#personal>"+
+	                    "where {"
+	                    + "  ?name wdt:P106 wd:Q82955. "
+	                    + "  ?name wdt:P27 wd:Q155.    "
+	                    + "  ?name wdt:P937 wd:Q2844.  "
+	                    + "  ?name rdfs:label ?nameLabel. "
+	                    + "  optional {?name wdt:P570 ?death}."
+	                    + "  filter (!bound(?death))."
+	                    + "  FILTER langMatches( lang(?nameLabel), \"pt\" )."
+	                    + "  FILTER strafter(?nameLabel,"+name+")."
+	                    + "  BIND (STR(?nameLabel)  AS ?label) "
+	                    + "} ";
+	            
+	            
+
+	            System.out.println("Query : ");
+	            System.out.println(querySelect);
+
+	            String endpoint2 = "https://query.wikidata.org/sparql";
+	            System.out.println("");
+	            System.out.println("Endpoint : " + endpoint2);
+	            System.out.println("");
+	            System.out.println("Result : ");
+	            Endpoint sp2 = new Endpoint(endpoint2, false);
+	            HashMap<String, HashMap> rs2 = sp2.query(querySelect);
+	            printResult(rs2, 30);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Error");
+			e.printStackTrace();
+		}
+        
+        
+        
+            
+         
+            
+
+                 
+            
+           
+
+           
+
+        
+    }
+
+    public static void printResult(HashMap<String, HashMap> rs, int size) {
+
+        for (String variable : (ArrayList<String>) rs.get("result").get("variables")) {
+            System.out.print(String.format("%-" + size + "." + size + "s", variable) + " | ");
+        }
+        System.out.print("\n");
+        for (HashMap<String, Object> value : (ArrayList<HashMap<String, Object>>) rs.get("result").get("rows")) {
+            //System.out.print(value);
+            /* for (String key : value.keySet()) {
+         System.out.println(value.get(key));            
+         }*/
+            for (String variable : (ArrayList<String>) rs.get("result").get("variables")) {
+                //System.out.println(value.get(variable));
+                System.out.print(String.format("%-" + size + "." + size + "s", value.get(variable)) + " | ");
+            }
+            System.out.print("\n");
+        }
+    }
+
+    public static void exampleWikidata() {
+        try {
+            String endpoint3 = "https://query.wikidata.org/sparql";
+            Endpoint sp3 = new Endpoint(endpoint3, false);
+            sp3.setMethodHTTPRead("GET");
+
+            String queryPopulationInFrance
+                    = "SELECT ?name ?label "
+                            + //"FROM <http://linkedgadget.com/wiki/Data:Jarvis_2016#personal>"+
+                            "where {"
+                            + "  ?name wdt:P106 wd:Q82955. "
+                            + "  ?name wdt:P27 wd:Q155.    "
+                            + "  ?name wdt:P937 wd:Q2844.  "
+                            + "  ?name rdfs:label ?nameLabel. "
+                            + "  optional {?name wdt:P570 ?death}."
+                            + "  filter (!bound(?death))."
+                            + "  FILTER langMatches( lang(?nameLabel), \"pt\" )."
+                            + "  BIND (STR(?nameLabel)  AS ?label) "
+                            + "} LIMIT 1";
+            HashMap<String, HashMap> rs3_queryPopulationInFrance = sp3.query(queryPopulationInFrance);
+
+            ArrayList<HashMap<String, Object>> rows_queryPopulationInFrance = (ArrayList) rs3_queryPopulationInFrance.get("result").get("rows");
+            if (rows_queryPopulationInFrance.size() > 0) {
+                System.out.print("Result population in France: " + rows_queryPopulationInFrance.get(0).get("population"));
+                //printResult(rs3_queryPopulationInFrance,30);
+            }
+
+        } catch (EndpointException eex) {
+            System.out.println(eex);
+            eex.printStackTrace();
+        }
+    }
+}

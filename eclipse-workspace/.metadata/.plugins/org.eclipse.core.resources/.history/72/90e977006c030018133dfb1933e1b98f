@@ -1,0 +1,10 @@
+package com.bordercloud.sparql;
+
+public class Proc extends Thread{
+	public void Thread() {
+		
+	}
+	public void run() {
+		System.out.println("TESTE");
+	}
+}
